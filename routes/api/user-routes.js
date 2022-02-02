@@ -59,7 +59,10 @@ router.put('/:id', (req, res) => {
     // if req.body has exacty key/value pairs to match the model, you can just use `req.body` instead
     // we pass in req.body to provide the new data we want to use in the update and req.params.id to indicate where we want that new data to be used
     // associated SQL syntax would look like: UPDATE users SET username = "Lernantino", email = "lernantino@gmail.com", password = "newPassword1234" WHERE id = 1;
+
+    // pass in req.body instead to only update what's passed through
     User.update(req.body, {
+        individualHooks: true,
         where: {
             id: req.params.id
         }
