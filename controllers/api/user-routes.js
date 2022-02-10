@@ -19,6 +19,10 @@ router.get('/', (req, res) => {
 router.get('/:id', (req, res) => {
     // findOne is similar to SELECT * FROM users WHERE id = 1
     User.findOne({
+        attributes: { exclude: ['password'] },
+        where: {
+            id: req.params.id
+        },
         include: [
             {
                 model: Post,
@@ -38,11 +42,7 @@ router.get('/:id', (req, res) => {
                 through: Vote,
                 as: 'voted_posts'
             }
-        ],
-        attributes: { exclude: ['password'] },
-        where: {
-            id: req.params.id
-        }
+        ] 
     })
     .then(dbUserData => {
         if(!dbUserData) {
@@ -116,7 +116,7 @@ router.post('/login', (req, res) => {
 router.post('/logout', (req, res) => {
     if(req.session.loggedIn) {
         req.session.destroy(() => {
-            req.status(204).end();
+            res.status(204).end();
         });
     } else {
         res.status(404).end();
